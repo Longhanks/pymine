@@ -17,10 +17,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-from PyQt4 import uic
-from PyQt4.QtGui import QWidget
-from PyQt4.QtGui import QPushButton
+from PyQt5 import uic
+from PyQt5.QtWidgets import QWidget, QPushButton, QMessageBox
 from os.path import join
+import os
 from random import randint
 import sys
 
@@ -30,7 +30,13 @@ from Tile import Tile
 class Game(QWidget):
     def __init__(self, parent=None):
         super(Game, self).__init__(parent)
-        uic.loadUi(resource_path(join('ui', 'Game.ui')), self)
+        
+        if getattr(sys, 'frozen', False):
+            uic.loadUi(join(os.path.dirname(sys.executable), 'ui', 'Game.ui'), self)
+        
+        else:
+            uic.loadUi(resource_path(join('ui', 'Game.ui')), self)
+        
         self.btns = []
         self.btnDict = {}
         

@@ -17,8 +17,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-from PyQt4.QtGui import QPushButton, QMessageBox
-from PyQt4.QtCore import Qt, pyqtSignal, QCoreApplication
+from PyQt5.QtWidgets import QPushButton, QMessageBox
+from PyQt5.QtCore import Qt, pyqtSignal, QCoreApplication
 
 class Tile(QPushButton):
     rightClicked = pyqtSignal()

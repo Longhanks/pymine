@@ -1,7 +1,7 @@
 # -*- mode: python -*-
-#pyinstaller pymine_singlefile.spec [-y] [--clean]
+#pyinstaller PyQtX_singlefile.spec [-y] [--clean]
 
-a = Analysis(['pymine.py'],
+a = Analysis(['PyQtX.py'],
              pathex=['.'],
              hiddenimports=[],
              hookspath=None,

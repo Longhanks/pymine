@@ -17,9 +17,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-from PyQt4 import uic
-from PyQt4.QtGui import QDialog
+from PyQt5 import uic
+from PyQt5.QtWidgets import QDialog, QMessageBox
 from os.path import join
+import os
 import sys
 
 from utilities import resource_path
@@ -27,7 +28,13 @@ from utilities import resource_path
 class NewGameDialog(QDialog):
     def __init__(self, parent=None):
         super(NewGameDialog, self).__init__(parent)
-        uic.loadUi(resource_path(join('ui', 'NewGameDialog.ui')), self)
+        
+        if getattr(sys, 'frozen', False):
+            uic.loadUi(join(os.path.dirname(sys.executable), 'ui', 'NewGameDialog.ui'), self)
+        
+        else:
+            uic.loadUi(resource_path(join('ui', 'NewGameDialog.ui')), self)
+        
         self.comboBoxDefaultModes.currentIndexChanged.connect(self.checkNewMode)
         
     def checkNewMode(self):          
