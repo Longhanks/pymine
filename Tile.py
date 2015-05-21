@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Python Minesweeper (pymine)
 # Copyright (C) 2014 Andreas Schulz

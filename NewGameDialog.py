@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Python Minesweeper (pymine)
 # Copyright (C) 2014 Andreas Schulz
@@ -23,18 +22,12 @@ from os.path import join
 import os
 import sys
 
-from utilities import resource_path
+from utilities import getResourcesPath
 
 class NewGameDialog(QDialog):
     def __init__(self, parent=None):
         super(NewGameDialog, self).__init__(parent)
-        
-        if getattr(sys, 'frozen', False):
-            uic.loadUi(join(os.path.dirname(sys.executable), 'ui', 'NewGameDialog.ui'), self)
-        
-        else:
-            uic.loadUi(resource_path(join('ui', 'NewGameDialog.ui')), self)
-        
+        uic.loadUi(os.path.join(getResourcesPath(),'ui', 'newgamedialog.ui'), self)
         self.comboBoxDefaultModes.currentIndexChanged.connect(self.checkNewMode)
         
     def checkNewMode(self):          

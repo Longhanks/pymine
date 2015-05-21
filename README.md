@@ -1,5 +1,4 @@
 # pymine
-Minesweeper in Python/PyQt4
+Minesweeper in Python3/PyQt5
 
-Simple Minesweeper game. Included instructions on how to build on Windows.
-No more features planned, game is done. :)
+Simple Minesweeper game. 

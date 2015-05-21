@@ -1,1 +1,0 @@
-python3 setup.py bdist_mac --qt-menu-nib=*/Qt/5.4/clang_64/plugins/platforms 

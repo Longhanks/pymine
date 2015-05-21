@@ -16,12 +16,24 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-import os
 import sys
+import os
+from PyQt5.QtWidgets import QApplication
 
-def getResourcesPath():
-    resourcesPath = os.path.join(os.path.dirname(sys.executable), '..', 'Resources')
-    if not os.path.isfile(os.path.join(resourcesPath, 'ui', 'mainwindow.ui')):
-    # Application is called via interpreter, it's not frozen
-        resourcesPath = os.path.dirname(os.path.abspath(__file__))
-    return resourcesPath
+from mainwindow import MainWindow
+
+thisfile = os.path.abspath(__file__)
+sys.path.insert(0, os.path.normpath(os.path.join(os.path.dirname(thisfile), '..')))
+
+def main(argv=None):
+    if not argv:
+        argv = sys.argv
+    
+    app = QApplication(argv)
+    window = MainWindow()
+    window.show()
+    return app.exec_()
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))

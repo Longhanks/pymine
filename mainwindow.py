@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Python Minesweeper (pymine)
 # Copyright (C) 2014 Andreas Schulz
@@ -17,26 +16,21 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-from PyQt5 import uic, QtCore
-from PyQt5.QtCore import QCoreApplication
-from PyQt5.QtWidgets import QMainWindow, QMessageBox
-from os.path import join
 import os
 import sys
 
-from utilities import resource_path
-from NewGameDialog import NewGameDialog
-from Game import Game
+from PyQt5 import uic, QtCore
+from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
+
+from utilities import getResourcesPath
+from newgamedialog import NewGameDialog
+from game import Game
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-
-        if getattr(sys, 'frozen', False):
-            uic.loadUi(join(os.path.dirname(sys.executable), 'ui', 'MainWindow.ui'), self)
-        
-        else:
-            uic.loadUi(resource_path(join('ui', 'MainWindow.ui')), self)
+        uic.loadUi(os.path.join(getResourcesPath(),'ui', 'mainwindow.ui'), self)
         
         self.actionNewGame.triggered.connect(self.showNewGameDialog)
         self.pushButtonNewGame.clicked.connect(self.showNewGameDialog)

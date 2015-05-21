@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Python Minesweeper (pymine)
 # Copyright (C) 2014 Andreas Schulz
@@ -17,25 +16,19 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-from PyQt5 import uic
-from PyQt5.QtWidgets import QWidget, QPushButton, QMessageBox
-from os.path import join
 import os
 from random import randint
-import sys
 
-from utilities import resource_path
-from Tile import Tile
+from PyQt5 import uic
+from PyQt5.QtWidgets import QWidget, QPushButton, QMessageBox
+
+from utilities import getResourcesPath
+from tile import Tile
 
 class Game(QWidget):
     def __init__(self, parent=None):
         super(Game, self).__init__(parent)
-        
-        if getattr(sys, 'frozen', False):
-            uic.loadUi(join(os.path.dirname(sys.executable), 'ui', 'Game.ui'), self)
-        
-        else:
-            uic.loadUi(resource_path(join('ui', 'Game.ui')), self)
+        uic.loadUi(os.path.join(getResourcesPath(),'ui', 'game.ui'), self)
         
         self.btns = []
         self.btnDict = {}
@@ -55,16 +48,16 @@ class Game(QWidget):
                 btn.myY = row
                 btn.setObjectName("btn_" + str(column) + "_" + str(row))
         
-        #apply the mines        
+        # apply the mines        
         for myInt in self.getListOfInts((len(self.btns) - 1), mines):
             self.btns[myInt].mine = True
             self.btns[myInt].done = True
             
-        #add buttons to name-button dictionary
+        # add buttons to name-button dictionary
         for btn in self.btns:
             self.btnDict[str(btn.objectName())] = btn
             
-        #add all neighbors of all buttons to the buttons
+        # add all neighbors of all buttons to the buttons
         for btn in self.btns:
             btnTopLeftStr = "btn_" + str(btn.myX  - 1) + "_" + str(btn.myY - 1)
             btnTopStr = "btn_" + str(btn.myX ) + "_" + str(btn.myY - 1)
