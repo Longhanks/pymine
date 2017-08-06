@@ -41,12 +41,12 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent=parent)
         uic.loadUi(path.join(getResourcesPath(),'ui', 'mainwindow.ui'), self)
-        
+
         self.actionNewGame.triggered.connect(self.showNewGameDialog)
         self.pushButtonNewGame.clicked.connect(self.showNewGameDialog)
         self.actionExit.triggered.connect(lambda: self.close())
         self.dialogIsVisible = False
-        
+
     def showNewGameDialog(self):
         if self.dialogIsVisible:
             return
@@ -111,3 +111,4 @@ class MainWindow(QMainWindow):
             event.accept()
         else:
             event.ignore()
+

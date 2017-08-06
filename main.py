@@ -37,7 +37,7 @@ sys.path.insert(0, path.normpath(path.join(path.dirname(path.abspath(__file__)),
 def main(argv=None):
     if not argv:
         argv = sys.argv
-    
+
     app = QApplication(argv)
     window = MainWindow()
     window.show()
@@ -46,3 +46,4 @@ def main(argv=None):
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
+

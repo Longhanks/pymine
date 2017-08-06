@@ -39,8 +39,8 @@ class NewGameDialog(QDialog):
         super(NewGameDialog, self).__init__(parent, Qt.Sheet)
         uic.loadUi(path.join(getResourcesPath(), 'ui', 'newgamedialog.ui'), self)
         self.comboBoxDefaultModes.currentIndexChanged.connect(self.checkNewMode)
-        
-    def checkNewMode(self):          
+
+    def checkNewMode(self):
         if self.comboBoxDefaultModes.currentText() == 'Beginner':
             self.spinBoxRows.setEnabled(False)
             self.spinBoxRows.setValue(9)
@@ -48,7 +48,7 @@ class NewGameDialog(QDialog):
             self.spinBoxColumns.setValue(9)
             self.spinBoxMines.setEnabled(False)
             self.spinBoxMines.setValue(10)
-        
+
         elif self.comboBoxDefaultModes.currentText() == 'Intermediate':
             self.spinBoxRows.setEnabled(False)
             self.spinBoxRows.setValue(16)
@@ -56,7 +56,7 @@ class NewGameDialog(QDialog):
             self.spinBoxColumns.setValue(16)
             self.spinBoxMines.setEnabled(False)
             self.spinBoxMines.setValue(40)
-        
+
         elif self.comboBoxDefaultModes.currentText() == 'Expert':
             self.spinBoxRows.setEnabled(False)
             self.spinBoxRows.setValue(30)
@@ -64,8 +64,9 @@ class NewGameDialog(QDialog):
             self.spinBoxColumns.setValue(16)
             self.spinBoxMines.setEnabled(False)
             self.spinBoxMines.setValue(99)
-            
+
         elif self.comboBoxDefaultModes.currentText() == 'Custom':
             self.spinBoxRows.setEnabled(True)
             self.spinBoxColumns.setEnabled(True)
             self.spinBoxMines.setEnabled(True)
+

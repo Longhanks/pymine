@@ -43,7 +43,7 @@ class GameWidget(QWidget):
     def __init__(self, rows, columns, mines, parent=None):
         super(GameWidget, self).__init__(parent)
         uic.loadUi(path.join(getResourcesPath(), 'ui', 'gamewidget.ui'), self)
-        
+
         self.btns = []
         self.btnDict = {}
 
@@ -57,15 +57,15 @@ class GameWidget(QWidget):
                 btn.setObjectName('btn_' + str(column) + '_' + str(row))
                 btn.clickedSuccessfully.connect(self.checkIfGameIsWon)
                 btn.clickedMine.connect(lambda: self.gameIsLost.emit())
-        
-        # apply the mines        
+
+        # apply the mines
         for myInt in self.getListOfInts((len(self.btns) - 1), mines):
             self.btns[myInt].isMine = True
-            
+
         # add buttons to name-button dictionary
         for btn in self.btns:
             self.btnDict[str(btn.objectName())] = btn
-            
+
         # add all neighbors of all buttons to the buttons
         for btn in self.btns:
             btnTopLeftStr = 'btn_' + str(btn.myX - 1) + '_' + str(btn.myY - 1)
@@ -76,7 +76,7 @@ class GameWidget(QWidget):
             btnBottomLeftStr = 'btn_' + str(btn.myX - 1) + '_' + str(btn.myY + 1)
             btnBottomStr = 'btn_' + str(btn.myX) + '_' + str(btn.myY + 1)
             btnBottomRightStr = 'btn_' + str(btn.myX + 1) + '_' + str(btn.myY + 1)
-            
+
             if btnTopLeftStr in self.btnDict:
                 btn.neighbors.append(self.btnDict[btnTopLeftStr])
             if btnTopStr in self.btnDict:
@@ -93,12 +93,12 @@ class GameWidget(QWidget):
                 btn.neighbors.append(self.btnDict[btnBottomStr])
             if btnBottomRightStr in self.btnDict:
                 btn.neighbors.append(self.btnDict[btnBottomRightStr])
-                
+
             for neighbor in btn.neighbors:
                 if neighbor.isMine:
                     btn.count = btn.count + 1
-            
-            
+
+
     def getListOfInts(self, numberRange, numberUniques):
         listOfInts = []
         while len(listOfInts) < numberUniques:
@@ -108,9 +108,10 @@ class GameWidget(QWidget):
             else:
                 listOfInts.append(newRand)
         return listOfInts
-                
+
     def checkIfGameIsWon(self):
         for btn in self.btns:
             if not (btn.countIsVisible or btn.isMine):
                 return
         self.gameIsWon.emit()
+

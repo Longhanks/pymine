@@ -33,7 +33,7 @@ class Tile(QPushButton):
     rightClicked = pyqtSignal()
     clickedMine = pyqtSignal()
     clickedSuccessfully = pyqtSignal()
-    
+
     def __init__(self, parent=None):
         super(Tile, self).__init__(parent)
         self.setMinimumSize(20, 20)
@@ -46,14 +46,14 @@ class Tile(QPushButton):
         self.countIsVisible = False
         self.clicked.connect(self.clickedTile)
         self.rightClicked.connect(self.rightClickedTile)
-        
+
     def clickedTile(self):
         if self.text() == 'F':
             return
 
         elif self.countIsVisible:
             return
-        
+
         elif self.isMine:
             self.clickedMine.emit()
             return
@@ -65,20 +65,21 @@ class Tile(QPushButton):
                 if not nb.countIsVisible:
                     nb.clickedTile()
         self.clickedSuccessfully.emit()
-                
+
     def rightClickedTile(self):
         if self.countIsVisible:
             return
-            
+
         if self.text() == 'F':
             self.setStyleSheet('QPushButton {color: black;}')
             self.setText('')
         else:
             self.setStyleSheet('QPushButton {color: red;}')
             self.setText('F')
-        
+
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.clicked.emit(False)
         if event.button() == Qt.RightButton:
             self.rightClicked.emit()
+
