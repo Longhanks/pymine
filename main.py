@@ -17,13 +17,13 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 import sys
-import os
+from os import path
 from PyQt5.QtWidgets import QApplication
 
 from mainwindow import MainWindow
 
-thisfile = os.path.abspath(__file__)
-sys.path.insert(0, os.path.normpath(os.path.join(os.path.dirname(thisfile), '..')))
+sys.path.insert(0, path.normpath(path.join(path.dirname(path.abspath(__file__)), '..')))
+
 
 def main(argv=None):
     if not argv:

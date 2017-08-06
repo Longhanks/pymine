@@ -17,21 +17,20 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 from PyQt5 import uic
-from PyQt5.QtWidgets import QDialog, QMessageBox
-from os.path import join
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QDialog
 import os
-import sys
 
 from utilities import getResourcesPath
 
 class NewGameDialog(QDialog):
     def __init__(self, parent=None):
-        super(NewGameDialog, self).__init__(parent)
+        super(NewGameDialog, self).__init__(parent, Qt.Sheet)
         uic.loadUi(os.path.join(getResourcesPath(),'ui', 'newgamedialog.ui'), self)
         self.comboBoxDefaultModes.currentIndexChanged.connect(self.checkNewMode)
         
     def checkNewMode(self):          
-        if self.comboBoxDefaultModes.currentText() == "Beginner":
+        if self.comboBoxDefaultModes.currentText() == 'Beginner':
             self.spinBoxRows.setEnabled(False)
             self.spinBoxRows.setValue(9)
             self.spinBoxColumns.setEnabled(False)
@@ -39,7 +38,7 @@ class NewGameDialog(QDialog):
             self.spinBoxMines.setEnabled(False)
             self.spinBoxMines.setValue(10)
         
-        elif self.comboBoxDefaultModes.currentText() == "Intermediate":
+        elif self.comboBoxDefaultModes.currentText() == 'Intermediate':
             self.spinBoxRows.setEnabled(False)
             self.spinBoxRows.setValue(16)
             self.spinBoxColumns.setEnabled(False)
@@ -47,7 +46,7 @@ class NewGameDialog(QDialog):
             self.spinBoxMines.setEnabled(False)
             self.spinBoxMines.setValue(40)
         
-        elif self.comboBoxDefaultModes.currentText() == "Expert":
+        elif self.comboBoxDefaultModes.currentText() == 'Expert':
             self.spinBoxRows.setEnabled(False)
             self.spinBoxRows.setValue(30)
             self.spinBoxColumns.setEnabled(False)
@@ -55,7 +54,7 @@ class NewGameDialog(QDialog):
             self.spinBoxMines.setEnabled(False)
             self.spinBoxMines.setValue(99)
             
-        elif self.comboBoxDefaultModes.currentText() == "Custom":
+        elif self.comboBoxDefaultModes.currentText() == 'Custom':
             self.spinBoxRows.setEnabled(True)
             self.spinBoxColumns.setEnabled(True)
             self.spinBoxMines.setEnabled(True)

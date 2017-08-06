@@ -20,7 +20,7 @@ import os
 from random import randint
 
 from PyQt5 import uic
-from PyQt5.QtWidgets import QWidget, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QWidget
 
 from utilities import getResourcesPath
 from tile import Tile
@@ -46,7 +46,7 @@ class Game(QWidget):
                 btn.rightClicked.connect(btn.setMine)
                 btn.myX = column
                 btn.myY = row
-                btn.setObjectName("btn_" + str(column) + "_" + str(row))
+                btn.setObjectName('btn_' + str(column) + '_' + str(row))
         
         # apply the mines        
         for myInt in self.getListOfInts((len(self.btns) - 1), mines):
@@ -59,14 +59,14 @@ class Game(QWidget):
             
         # add all neighbors of all buttons to the buttons
         for btn in self.btns:
-            btnTopLeftStr = "btn_" + str(btn.myX  - 1) + "_" + str(btn.myY - 1)
-            btnTopStr = "btn_" + str(btn.myX ) + "_" + str(btn.myY - 1)
-            btnTopRightStr = "btn_" + str(btn.myX + 1) + "_" + str(btn.myY - 1)
-            btnLeftStr = "btn_" + str(btn.myX - 1) + "_" + str(btn.myY)
-            btnRightStr = "btn_" + str(btn.myX  + 1) + "_" + str(btn.myY)
-            btnBottomLeftStr = "btn_" + str(btn.myX  - 1) + "_" + str(btn.myY + 1)
-            btnBottomStr = "btn_" + str(btn.myX ) + "_" + str(btn.myY + 1)
-            btnBottomRightStr = "btn_" + str(btn.myX  + 1) + "_" + str(btn.myY + 1)
+            btnTopLeftStr = 'btn_' + str(btn.myX - 1) + '_' + str(btn.myY - 1)
+            btnTopStr = 'btn_' + str(btn.myX) + '_' + str(btn.myY - 1)
+            btnTopRightStr = 'btn_' + str(btn.myX + 1) + '_' + str(btn.myY - 1)
+            btnLeftStr = 'btn_' + str(btn.myX - 1) + '_' + str(btn.myY)
+            btnRightStr = 'btn_' + str(btn.myX + 1) + '_' + str(btn.myY)
+            btnBottomLeftStr = 'btn_' + str(btn.myX - 1) + '_' + str(btn.myY + 1)
+            btnBottomStr = 'btn_' + str(btn.myX) + '_' + str(btn.myY + 1)
+            btnBottomRightStr = 'btn_' + str(btn.myX + 1) + '_' + str(btn.myY + 1)
             
             if btnTopLeftStr in self.btnDict:
                 btn.neighbors.append(self.btnDict[btnTopLeftStr])

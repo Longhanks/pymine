@@ -17,28 +17,28 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 import os
-import sys
 
-from PyQt5 import uic, QtCore
-from PyQt5.QtCore import QCoreApplication
+from PyQt5 import uic
+from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from utilities import getResourcesPath
 from newgamedialog import NewGameDialog
 from game import Game
 
+
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
-        super(MainWindow, self).__init__(parent)
+        super(MainWindow, self).__init__(parent=parent)
         uic.loadUi(os.path.join(getResourcesPath(),'ui', 'mainwindow.ui'), self)
         
         self.actionNewGame.triggered.connect(self.showNewGameDialog)
         self.pushButtonNewGame.clicked.connect(self.showNewGameDialog)
         self.actionExit.triggered.connect(self.closeMe)
-        self.setWindowTitle("pymine")
+        self.setWindowTitle('pymine')
         
     def showNewGameDialog(self):
-        dlg = NewGameDialog()
+        dlg = NewGameDialog(self)
         if dlg.exec_():
             game = Game(self)
             self.setCentralWidget(game)
@@ -47,7 +47,12 @@ class MainWindow(QMainWindow):
             QCoreApplication.instance().quit()
             
     def closeMe(self, event):
-        if QMessageBox.question(self, "Quit", "Are you sure you want to quit?",
-                            QMessageBox.Yes | QMessageBox.No,
-                            QMessageBox.No) == QMessageBox.Yes:
+        msgBox = QMessageBox(parent=self)
+        msgBox.setWindowModality(Qt.WindowModal)
+        msgBox.setWindowTitle('Confirm exit')
+        msgBox.setIcon(QMessageBox.Question)
+        msgBox.setText('Are you sure you want to quit?')
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msgBox.setDefaultButton(QMessageBox.No)
+        if msgBox.exec_() == QMessageBox.Yes:
             QCoreApplication.instance().quit()

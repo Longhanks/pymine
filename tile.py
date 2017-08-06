@@ -37,9 +37,14 @@ class Tile(QPushButton):
         
         if self.mine:
             self.setText("M")
-            if QMessageBox.question(self, "You Lost!", "Game over. New game?",
-                            QMessageBox.Yes | QMessageBox.No,
-                            QMessageBox.No) == QMessageBox.No:
+            msgBox = QMessageBox(parent=self.parent().parent())
+            msgBox.setWindowModality(Qt.WindowModal)
+            msgBox.setWindowTitle('You Lost!')
+            msgBox.setIcon(QMessageBox.Question)
+            msgBox.setText('Game over. New game?')
+            msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msgBox.setDefaultButton(QMessageBox.No)
+            if msgBox.exec_() == QMessageBox.No:
                 QCoreApplication.instance().quit()
             else:
                 self.parent().parent().showNewGameDialog()
@@ -53,9 +58,14 @@ class Tile(QPushButton):
                         nb.checkMine()
             
         if self.parent().checkIfDone():
-            if QMessageBox.question(self, "You won!", "Congratilations! New game?",
-                            QMessageBox.Yes | QMessageBox.No,
-                            QMessageBox.No) == QMessageBox.No:
+            msgBox = QMessageBox(parent=self.parent().parent())
+            msgBox.setWindowModality(Qt.WindowModal)
+            msgBox.setWindowTitle('You won!')
+            msgBox.setIcon(QMessageBox.Question)
+            msgBox.setText('Congratulations! New game?')
+            msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msgBox.setDefaultButton(QMessageBox.No)
+            if msgBox.exec_() == QMessageBox.No:
                 QCoreApplication.instance().quit()
             else:
                 self.parent().parent().showNewGameDialog()
