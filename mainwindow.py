@@ -19,7 +19,7 @@
 import os
 
 from PyQt5 import uic
-from PyQt5.QtCore import QCoreApplication, Qt
+from PyQt5.QtCore import QCoreApplication, Qt, QTimer
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from utilities import getResourcesPath
@@ -42,6 +42,7 @@ class MainWindow(QMainWindow):
         if dlg.exec_():
             game = Game(self)
             self.setCentralWidget(game)
+            QTimer.singleShot(0, Qt.CoarseTimer, lambda: self.resize(0, 0))
             game.addTiles(dlg.spinBoxRows.value(), dlg.spinBoxColumns.value(), dlg.spinBoxMines.value())
         else:
             QCoreApplication.instance().quit()
