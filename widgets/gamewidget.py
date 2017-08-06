@@ -1,35 +1,48 @@
 # -*- coding: utf-8 -*-
 # Python Minesweeper (pymine)
-# Copyright (C) 2014 Andreas Schulz
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# The MIT License (MIT)
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# Copyright (c) 2014 - 2017 Andreas Schulz
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+# All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
-import os
+from os import path
 from random import randint
 
 from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import pyqtSignal
 
 from utilities import getResourcesPath
-from tile import Tile
+from widgets.tile import Tile
 
 
-class Game(QWidget):
+class GameWidget(QWidget):
+    gameIsLost = pyqtSignal()
+    gameIsWon = pyqtSignal()
+
     def __init__(self, rows, columns, mines, parent=None):
-        super(Game, self).__init__(parent)
-        uic.loadUi(os.path.join(getResourcesPath(),'ui', 'game.ui'), self)
+        super(GameWidget, self).__init__(parent)
+        uic.loadUi(path.join(getResourcesPath(), 'ui', 'gamewidget.ui'), self)
         
         self.btns = []
         self.btnDict = {}
@@ -39,16 +52,15 @@ class Game(QWidget):
                 btn = Tile(self)
                 self.mainLayout.addWidget(btn, column, row)
                 self.btns.append(btn)
-                btn.clicked.connect(btn.checkMine)
-                btn.rightClicked.connect(btn.setMine)
                 btn.myX = column
                 btn.myY = row
                 btn.setObjectName('btn_' + str(column) + '_' + str(row))
+                btn.clickedSuccessfully.connect(self.checkIfGameIsWon)
+                btn.clickedMine.connect(lambda: self.gameIsLost.emit())
         
         # apply the mines        
         for myInt in self.getListOfInts((len(self.btns) - 1), mines):
-            self.btns[myInt].mine = True
-            self.btns[myInt].done = True
+            self.btns[myInt].isMine = True
             
         # add buttons to name-button dictionary
         for btn in self.btns:
@@ -83,9 +95,8 @@ class Game(QWidget):
                 btn.neighbors.append(self.btnDict[btnBottomRightStr])
                 
             for neighbor in btn.neighbors:
-                if neighbor.mine:
-                    btn.count = btn.count +1
-            
+                if neighbor.isMine:
+                    btn.count = btn.count + 1
             
             
     def getListOfInts(self, numberRange, numberUniques):
@@ -98,10 +109,8 @@ class Game(QWidget):
                 listOfInts.append(newRand)
         return listOfInts
                 
-    def checkIfDone(self):
+    def checkIfGameIsWon(self):
         for btn in self.btns:
-            if btn.done == False:
-                return False
-        return True
-    
-    
+            if not (btn.countIsVisible or btn.isMine):
+                return
+        self.gameIsWon.emit()

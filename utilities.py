@@ -17,11 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 import os
-import sys
+
 
 def getResourcesPath():
-    resourcesPath = os.path.join(os.path.dirname(sys.executable), '..', 'Resources')
-    if not os.path.isfile(os.path.join(resourcesPath, 'ui', 'mainwindow.ui')):
-    # Application is called via interpreter, it's not frozen
-        resourcesPath = os.path.dirname(os.path.abspath(__file__))
-    return resourcesPath
+    return os.path.dirname(os.path.abspath(__file__))
