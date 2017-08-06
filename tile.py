@@ -24,6 +24,8 @@ class Tile(QPushButton):
     
     def __init__(self, parent=None):
         super(Tile, self).__init__(parent)
+        self.setMinimumSize(20, 20)
+        self.setMaximumSize(20, 20)
         self.mine = False
         self.neighbors = []
         self.myX = 0

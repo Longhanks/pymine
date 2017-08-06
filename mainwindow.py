@@ -40,10 +40,9 @@ class MainWindow(QMainWindow):
     def showNewGameDialog(self):
         dlg = NewGameDialog(self)
         if dlg.exec_():
-            game = Game(self)
+            game = Game(dlg.spinBoxRows.value(), dlg.spinBoxColumns.value(), dlg.spinBoxMines.value(), parent=self)
             self.setCentralWidget(game)
             QTimer.singleShot(0, Qt.CoarseTimer, lambda: self.resize(0, 0))
-            game.addTiles(dlg.spinBoxRows.value(), dlg.spinBoxColumns.value(), dlg.spinBoxMines.value())
         else:
             QCoreApplication.instance().quit()
             

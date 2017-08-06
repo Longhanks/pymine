@@ -25,21 +25,18 @@ from PyQt5.QtWidgets import QWidget
 from utilities import getResourcesPath
 from tile import Tile
 
+
 class Game(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, rows, columns, mines, parent=None):
         super(Game, self).__init__(parent)
         uic.loadUi(os.path.join(getResourcesPath(),'ui', 'game.ui'), self)
         
         self.btns = []
         self.btnDict = {}
-        
-    def addTiles(self, rows, columns, mines):
+
         for column in range(columns):
             for row in range(rows):
                 btn = Tile(self)
-                btn.setMinimumSize(20, 20)
-                btn.setMaximumSize(20, 20)
-                btn.setText("")
                 self.mainLayout.addWidget(btn, column, row)
                 self.btns.append(btn)
                 btn.clicked.connect(btn.checkMine)
@@ -99,7 +96,6 @@ class Game(QWidget):
                 pass
             else:
                 listOfInts.append(newRand)
-                
         return listOfInts
                 
     def checkIfDone(self):
