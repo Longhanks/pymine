@@ -34,7 +34,7 @@ from widgets.mainwindow import MainWindow
 sys.path.insert(0, path.normpath(path.join(path.dirname(path.abspath(__file__)), '..')))
 
 
-def main(argv=None):
+def main(argv=None) -> int:
     if not argv:
         argv = sys.argv
 

@@ -40,7 +40,7 @@ class NewGameDialog(QDialog):
         uic.loadUi(path.join(getResourcesPath(), 'ui', 'newgamedialog.ui'), self)
         self.comboBoxDefaultModes.currentIndexChanged.connect(self.checkNewMode)
 
-    def checkNewMode(self):
+    def checkNewMode(self) -> None:
         if self.comboBoxDefaultModes.currentText() == 'Beginner':
             self.spinBoxRows.setEnabled(False)
             self.spinBoxRows.setValue(9)

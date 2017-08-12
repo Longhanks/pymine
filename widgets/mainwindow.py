@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
         self.actionExit.triggered.connect(lambda: self.close())
         self.dialogIsVisible = False
 
-    def showNewGameDialog(self):
+    def showNewGameDialog(self) -> None:
         if self.dialogIsVisible:
             return
         self.dialogIsVisible = True
@@ -66,7 +66,7 @@ class MainWindow(QMainWindow):
         else:
             QCoreApplication.instance().quit()
 
-    def gameIsWon(self):
+    def gameIsWon(self) -> None:
         self.dialogIsVisible = True
         msgBox = QMessageBox(parent=self)
         msgBox.setWindowModality(Qt.WindowModal)
@@ -81,7 +81,7 @@ class MainWindow(QMainWindow):
             self.dialogIsVisible = False
             self.showNewGameDialog()
 
-    def gameIsLost(self):
+    def gameIsLost(self) -> None:
         self.dialogIsVisible = True
         msgBox = QMessageBox(parent=self)
         msgBox.setWindowModality(Qt.WindowModal)
@@ -96,7 +96,7 @@ class MainWindow(QMainWindow):
             self.dialogIsVisible = False
             self.showNewGameDialog()
 
-    def closeEvent(self, event: QCloseEvent):
+    def closeEvent(self, event: QCloseEvent) -> None:
         if self.dialogIsVisible:
             event.ignore()
             return
@@ -111,4 +111,3 @@ class MainWindow(QMainWindow):
             event.accept()
         else:
             event.ignore()
-

@@ -27,6 +27,7 @@
 
 from os import path
 from random import randint
+from typing import List, Tuple, Iterator
 
 from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget
@@ -40,78 +41,71 @@ class GameWidget(QWidget):
     gameIsLost = pyqtSignal()
     gameIsWon = pyqtSignal()
 
-    def __init__(self, rows, columns, mines, parent=None):
+    def __init__(self, rows: int, columns: int, mines: int, parent=None):
         super(GameWidget, self).__init__(parent)
         uic.loadUi(path.join(getResourcesPath(), 'ui', 'gamewidget.ui'), self)
 
-        self.btns = []
-        self.btnDict = {}
+        self.matrix: List[List[Tile]] = []
 
         for column in range(columns):
+            self.matrix.append([])
             for row in range(rows):
-                btn = Tile(self)
+                btn = Tile(x=column, y=row, parent=self)
                 self.mainLayout.addWidget(btn, column, row)
-                self.btns.append(btn)
-                btn.myX = column
-                btn.myY = row
-                btn.setObjectName('btn_' + str(column) + '_' + str(row))
-                btn.clickedSuccessfully.connect(self.checkIfGameIsWon)
+                btn.clickedSuccessfully.connect(self.clickSucceeded)
                 btn.clickedMine.connect(lambda: self.gameIsLost.emit())
+                self.matrix[column].append(btn)
 
         # apply the mines
-        for myInt in self.getListOfInts((len(self.btns) - 1), mines):
-            self.btns[myInt].isMine = True
-
-        # add buttons to name-button dictionary
-        for btn in self.btns:
-            self.btnDict[str(btn.objectName())] = btn
-
-        # add all neighbors of all buttons to the buttons
-        for btn in self.btns:
-            btnTopLeftStr = 'btn_' + str(btn.myX - 1) + '_' + str(btn.myY - 1)
-            btnTopStr = 'btn_' + str(btn.myX) + '_' + str(btn.myY - 1)
-            btnTopRightStr = 'btn_' + str(btn.myX + 1) + '_' + str(btn.myY - 1)
-            btnLeftStr = 'btn_' + str(btn.myX - 1) + '_' + str(btn.myY)
-            btnRightStr = 'btn_' + str(btn.myX + 1) + '_' + str(btn.myY)
-            btnBottomLeftStr = 'btn_' + str(btn.myX - 1) + '_' + str(btn.myY + 1)
-            btnBottomStr = 'btn_' + str(btn.myX) + '_' + str(btn.myY + 1)
-            btnBottomRightStr = 'btn_' + str(btn.myX + 1) + '_' + str(btn.myY + 1)
-
-            if btnTopLeftStr in self.btnDict:
-                btn.neighbors.append(self.btnDict[btnTopLeftStr])
-            if btnTopStr in self.btnDict:
-                btn.neighbors.append(self.btnDict[btnTopStr])
-            if btnTopRightStr in self.btnDict:
-                btn.neighbors.append(self.btnDict[btnTopRightStr])
-            if btnLeftStr in self.btnDict:
-                btn.neighbors.append(self.btnDict[btnLeftStr])
-            if btnRightStr in self.btnDict:
-                btn.neighbors.append(self.btnDict[btnRightStr])
-            if btnBottomLeftStr in self.btnDict:
-                btn.neighbors.append(self.btnDict[btnBottomLeftStr])
-            if btnBottomStr in self.btnDict:
-                btn.neighbors.append(self.btnDict[btnBottomStr])
-            if btnBottomRightStr in self.btnDict:
-                btn.neighbors.append(self.btnDict[btnBottomRightStr])
-
-            for neighbor in btn.neighbors:
-                if neighbor.isMine:
-                    btn.count = btn.count + 1
-
-
-    def getListOfInts(self, numberRange, numberUniques):
-        listOfInts = []
-        while len(listOfInts) < numberUniques:
-            newRand = (randint(0, numberRange))
-            if newRand in listOfInts:
-                pass
+        counter = 0
+        while counter < mines:
+            x = randint(0, columns - 1)
+            y = randint(0, rows - 1)
+            if self.matrix[x][y].isMine:
+                continue
             else:
-                listOfInts.append(newRand)
-        return listOfInts
+                self.matrix[x][y].isMine = True
+                counter += 1
 
-    def checkIfGameIsWon(self):
-        for btn in self.btns:
-            if not (btn.countIsVisible or btn.isMine):
-                return
+        # set the count
+        for column in self.matrix:
+            for tile in column:
+                for coords in self.getValidMatrixIndices(tile.x, tile.y):
+                    neighbor = self.matrix[coords[0]][coords[1]]
+                    if neighbor.isMine:
+                        tile.count += 1
+
+    def clickSucceeded(self, column: int, row: int) -> None:
+        btn = self.matrix[column][row]
+        if btn.count == 0:
+            for coords in self.getValidMatrixIndices(column, row):
+                self.matrix[coords[0]][coords[1]].clickedTile(ignoreMark=True)
+        self.checkIfGameIsWon()
+
+    def getValidMatrixIndices(self, x: int, y: int) -> Iterator[Tuple[int, int]]:
+        topLeft = (x - 1, y - 1)
+        top = (x, y - 1)
+        topRight = (x + 1, y - 1)
+        left = (x - 1, y)
+        right = (x + 1, y)
+        bottomLeft = (x - 1, y + 1)
+        bottom = (x, y + 1)
+        bottomRight = (x + 1, y + 1)
+
+        def matrixFilter(coords: Tuple[int, int]) -> bool:
+            if coords[0] >= 0 and coords[1] >= 0:
+                columns = len(self.matrix)
+                rows = len(self.matrix[0])
+                if coords[0] < columns and coords[1] < rows:
+                    return True
+            return False
+
+        return filter(matrixFilter, [topLeft, top, topRight, left, right, bottomLeft, bottom, bottomRight])
+
+    def checkIfGameIsWon(self) -> None:
+        for column in self.matrix:
+            for btn in column:
+                countIsVisible = btn.text() and btn.text() != 'F'
+                if not (countIsVisible or btn.isMine):
+                    return
         self.gameIsWon.emit()
-

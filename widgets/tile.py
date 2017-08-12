@@ -32,26 +32,27 @@ from PyQt5.QtCore import Qt, pyqtSignal
 class Tile(QPushButton):
     rightClicked = pyqtSignal()
     clickedMine = pyqtSignal()
-    clickedSuccessfully = pyqtSignal()
+    clickedSuccessfully = pyqtSignal(int, int)
 
-    def __init__(self, parent=None):
+    def __init__(self, x: int, y: int, parent=None):
         super(Tile, self).__init__(parent)
         self.setMinimumSize(20, 20)
         self.setMaximumSize(20, 20)
-        self.isMine = False
-        self.neighbors = []
-        self.myX = 0
-        self.myY = 0
-        self.count = 0
-        self.countIsVisible = False
+        self.isMine: bool = False
+        self.x: int = x
+        self.y: int = y
+        self.count: int = 0
         self.clicked.connect(self.clickedTile)
         self.rightClicked.connect(self.rightClickedTile)
 
-    def clickedTile(self):
+    def clickedTile(self, ignoreMark: bool=False):
         if self.text() == 'F':
-            return
+            if not ignoreMark:
+                return
+            else:
+                self.rightClickedTile()
 
-        elif self.countIsVisible:
+        elif self.text():
             return
 
         elif self.isMine:
@@ -59,15 +60,10 @@ class Tile(QPushButton):
             return
 
         self.setText(str(self.count))
-        self.countIsVisible = True
-        if self.count == 0:
-            for nb in self.neighbors:
-                if not nb.countIsVisible:
-                    nb.clickedTile()
-        self.clickedSuccessfully.emit()
+        self.clickedSuccessfully.emit(self.x, self.y)
 
-    def rightClickedTile(self):
-        if self.countIsVisible:
+    def rightClickedTile(self) -> None:
+        if self.text() and self.text() != 'F':
             return
 
         if self.text() == 'F':
@@ -78,8 +74,8 @@ class Tile(QPushButton):
             self.setText('F')
 
     def mousePressEvent(self, event):
+        super(Tile, self).mousePressEvent(event)
         if event.button() == Qt.LeftButton:
             self.clicked.emit(False)
         if event.button() == Qt.RightButton:
             self.rightClicked.emit()
-
