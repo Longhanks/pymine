@@ -51,7 +51,7 @@ class GameWidget(QWidget):
             self.matrix.append([])
             for row in range(rows):
                 btn = Tile(x=column, y=row, parent=self)
-                self.mainLayout.addWidget(btn, column, row)
+                self.mainLayout.addWidget(btn, row, column)
                 btn.clickedSuccessfully.connect(self.clickSucceeded)
                 btn.clickedMine.connect(lambda: self.gameIsLost.emit())
                 self.matrix[column].append(btn)
