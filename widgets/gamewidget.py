@@ -109,3 +109,4 @@ class GameWidget(QWidget):
                 if not (countIsVisible or btn.isMine):
                     return
         self.gameIsWon.emit()
+

@@ -28,8 +28,8 @@
 from os import path
 
 from PyQt5 import uic
-from PyQt5.QtCore import QCoreApplication, Qt, QTimer
-from PyQt5.QtWidgets import QMainWindow, QMessageBox
+from PyQt5.QtCore import QCoreApplication, Qt, QTimer, QPoint
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QApplication
 from PyQt5.QtGui import QCloseEvent
 
 from utilities import getResourcesPath
@@ -46,6 +46,8 @@ class MainWindow(QMainWindow):
         self.pushButtonNewGame.clicked.connect(self.showNewGameDialog)
         self.actionExit.triggered.connect(lambda: self.close())
         self.dialogIsVisible = False
+        center = QApplication.desktop().availableGeometry(self).center()
+        self.move(QPoint(center.x() - self.width() / 2, center.y() - self.height() / 2))
 
     def showNewGameDialog(self) -> None:
         if self.dialogIsVisible:
@@ -85,7 +87,7 @@ class MainWindow(QMainWindow):
         self.dialogIsVisible = True
         msgBox = QMessageBox(parent=self)
         msgBox.setWindowModality(Qt.WindowModal)
-        msgBox.setWindowTitle('You Lost!')
+        msgBox.setWindowTitle('You lost!')
         msgBox.setIcon(QMessageBox.Question)
         msgBox.setText('Game over. New game?')
         msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
