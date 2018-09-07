@@ -33,7 +33,6 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import pyqtSignal
 
-from utilities import getResourcesPath
 from widgets.tile import Tile
 
 
@@ -43,7 +42,7 @@ class GameWidget(QWidget):
 
     def __init__(self, rows: int, columns: int, mines: int, parent=None):
         super(GameWidget, self).__init__(parent)
-        uic.loadUi(path.join(getResourcesPath(), 'ui', 'gamewidget.ui'), self)
+        uic.loadUi(path.join(path.dirname(__file__), '..', 'ui', 'gamewidget.ui'), self)
 
         self.matrix: List[List[Tile]] = []
 
@@ -51,7 +50,7 @@ class GameWidget(QWidget):
             self.matrix.append([])
             for row in range(rows):
                 btn = Tile(x=column, y=row, parent=self)
-                self.mainLayout.addWidget(btn, row, column)
+                self.mainLayout.addWidget(btn, column, row)
                 btn.clickedSuccessfully.connect(self.clickSucceeded)
                 btn.clickedMine.connect(lambda: self.gameIsLost.emit())
                 self.matrix[column].append(btn)
@@ -105,7 +104,7 @@ class GameWidget(QWidget):
     def checkIfGameIsWon(self) -> None:
         for column in self.matrix:
             for btn in column:
-                countIsVisible = btn.text() and btn.text() != 'F'
+                countIsVisible = btn.label.text() and btn.label.text() != 'F'
                 if not (countIsVisible or btn.isMine):
                     return
         self.gameIsWon.emit()

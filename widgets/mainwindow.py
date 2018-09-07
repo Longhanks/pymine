@@ -3,7 +3,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014 - 2017 Andreas Schulz
+# Copyright (c) 2014 - 2018 Andreas Schulz
 #
 # All rights reserved.
 #
@@ -32,22 +32,21 @@ from PyQt5.QtCore import QCoreApplication, Qt, QTimer, QPoint
 from PyQt5.QtWidgets import QMainWindow, QMessageBox, QApplication
 from PyQt5.QtGui import QCloseEvent
 
-from utilities import getResourcesPath
 from widgets.newgamedialog import NewGameDialog
 from widgets.gamewidget import GameWidget
 
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
-        super(MainWindow, self).__init__(parent=parent)
-        uic.loadUi(path.join(getResourcesPath(),'ui', 'mainwindow.ui'), self)
+        super().__init__(parent=parent)
+        uic.loadUi(path.join(path.dirname(__file__), '..', 'ui', 'mainwindow.ui'), self)
 
         self.actionNewGame.triggered.connect(self.showNewGameDialog)
         self.pushButtonNewGame.clicked.connect(self.showNewGameDialog)
         self.actionExit.triggered.connect(lambda: self.close())
         self.dialogIsVisible = False
         center = QApplication.desktop().availableGeometry(self).center()
-        self.move(QPoint(center.x() - self.width() / 2, center.y() - self.height() / 2))
+        self.move(QPoint(center.x() - int(self.width() / 2), center.y() - int(self.height() / 2)))
 
     def showNewGameDialog(self) -> None:
         if self.dialogIsVisible:
@@ -63,7 +62,12 @@ class MainWindow(QMainWindow):
             game.gameIsWon.connect(self.gameIsWon)
             game.gameIsLost.connect(self.gameIsLost)
             self.setCentralWidget(game)
-            QTimer.singleShot(0, Qt.CoarseTimer, lambda: self.resize(0, 0))
+
+            def cb():
+                self.resize(0, 0)
+                self.setFixedSize(self.size())
+
+            QTimer.singleShot(0, Qt.CoarseTimer, cb)
             self.dialogIsVisible = False
         else:
             QCoreApplication.instance().quit()

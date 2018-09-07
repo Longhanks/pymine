@@ -3,7 +3,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014 - 2017 Andreas Schulz
+# Copyright (c) 2014 - 2018 Andreas Schulz
 #
 # All rights reserved.
 #
@@ -25,57 +25,63 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from PyQt5.QtWidgets import QPushButton
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtWidgets import QFrame, QLabel, QSizePolicy, QVBoxLayout
+from PyQt5.QtCore import QSize, Qt, pyqtSignal
 
 
-class Tile(QPushButton):
-    rightClicked = pyqtSignal()
+class Tile(QFrame):
     clickedMine = pyqtSignal()
     clickedSuccessfully = pyqtSignal(int, int)
 
     def __init__(self, x: int, y: int, parent=None):
-        super(Tile, self).__init__(parent)
-        self.setMinimumSize(20, 20)
-        self.setMaximumSize(20, 20)
-        self.isMine: bool = False
-        self.x: int = x
-        self.y: int = y
-        self.count: int = 0
-        self.clicked.connect(self.clickedTile)
-        self.rightClicked.connect(self.rightClickedTile)
+        super().__init__(parent)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(layout)
+        self.label = QLabel(self)
+        self.label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.label)
+        self.setStyleSheet('Tile { background-color: white; }')
+        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.isMine = False
+        self.x = x
+        self.y = y
+        self.count = 0
 
-    def clickedTile(self, ignoreMark: bool=False):
-        if self.text() == 'F':
+    def sizeHint(self):
+        return QSize(20, 20)
+
+    def clickedTile(self, ignoreMark=False):
+        if self.label.text() == 'F':
             if not ignoreMark:
                 return
             else:
                 self.rightClickedTile()
 
-        elif self.text():
+        elif self.label.text():
             return
 
         elif self.isMine:
             self.clickedMine.emit()
             return
 
-        self.setText(str(self.count))
+        self.label.setText(str(self.count))
         self.clickedSuccessfully.emit(self.x, self.y)
 
     def rightClickedTile(self) -> None:
-        if self.text() and self.text() != 'F':
+        if self.label.text() and self.label.text() != 'F':
             return
 
-        if self.text() == 'F':
-            self.setStyleSheet('QPushButton {color: black;}')
-            self.setText('')
+        if self.label.text() == 'F':
+            self.label.setStyleSheet('QLabel { color: black; }')
+            self.label.setText('')
         else:
-            self.setStyleSheet('QPushButton {color: red;}')
-            self.setText('F')
+            self.label.setStyleSheet('QLabel { color: red; }')
+            self.label.setText('F')
 
     def mousePressEvent(self, event):
-        super(Tile, self).mousePressEvent(event)
+        super().mousePressEvent(event)
         if event.button() == Qt.LeftButton:
-            self.clicked.emit(False)
+            self.clickedTile()
         if event.button() == Qt.RightButton:
-            self.rightClicked.emit()
+            self.rightClickedTile()

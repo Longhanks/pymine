@@ -3,7 +3,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014 - 2017 Andreas Schulz
+# Copyright (c) 2014 - 2018 Andreas Schulz
 #
 # All rights reserved.
 #
@@ -31,13 +31,11 @@ from PyQt5 import uic
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog
 
-from utilities import getResourcesPath
-
 
 class NewGameDialog(QDialog):
     def __init__(self, parent=None):
-        super(NewGameDialog, self).__init__(parent, Qt.Sheet)
-        uic.loadUi(path.join(getResourcesPath(), 'ui', 'newgamedialog.ui'), self)
+        super().__init__(parent, Qt.Sheet)
+        uic.loadUi(path.join(path.dirname(__file__), '..', 'ui', 'newgamedialog.ui'), self)
         self.comboBoxDefaultModes.currentIndexChanged.connect(self.checkNewMode)
 
     def checkNewMode(self) -> None:
