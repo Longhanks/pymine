@@ -3,7 +3,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014 - 2018 Andreas Schulz
+# Copyright (c) 2014 - 2020 Andreas Schulz
 #
 # All rights reserved.
 #
@@ -39,7 +39,7 @@ from widgets.gamewidget import GameWidget
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
-        uic.loadUi(path.join(path.dirname(__file__), '..', 'ui', 'mainwindow.ui'), self)
+        uic.loadUi(path.join(path.dirname(__file__), '..', 'ui', 'UI_MainWindow.ui'), self)
 
         self.actionNewGame.triggered.connect(self.showNewGameDialog)
         self.pushButtonNewGame.clicked.connect(self.showNewGameDialog)

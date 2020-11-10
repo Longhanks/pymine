@@ -3,7 +3,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014 - 2018 Andreas Schulz
+# Copyright (c) 2014 - 2020 Andreas Schulz
 #
 # All rights reserved.
 #
@@ -35,8 +35,10 @@ from PyQt5.QtWidgets import QDialog
 class NewGameDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent, Qt.Sheet)
-        uic.loadUi(path.join(path.dirname(__file__), '..', 'ui', 'newgamedialog.ui'), self)
+        uic.loadUi(path.join(path.dirname(__file__), '..', 'ui', 'UI_NewGameDialog.ui'), self)
         self.comboBoxDefaultModes.currentIndexChanged.connect(self.checkNewMode)
+        if parent is not None:
+            self.move(parent.window().frameGeometry().topLeft() + parent.window().rect().center() - self.rect().center())
 
     def checkNewMode(self) -> None:
         if self.comboBoxDefaultModes.currentText() == 'Beginner':
@@ -67,4 +69,3 @@ class NewGameDialog(QDialog):
             self.spinBoxRows.setEnabled(True)
             self.spinBoxColumns.setEnabled(True)
             self.spinBoxMines.setEnabled(True)
-

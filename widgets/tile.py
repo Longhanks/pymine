@@ -3,7 +3,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014 - 2018 Andreas Schulz
+# Copyright (c) 2014 - 2020 Andreas Schulz
 #
 # All rights reserved.
 #
@@ -41,7 +41,7 @@ class Tile(QFrame):
         self.label = QLabel(self)
         self.label.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.label)
-        self.setStyleSheet('Tile { background-color: white; }')
+        self.setStyleSheet('QFrame { background-color: white; }')
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         self.isMine = False
         self.x = x

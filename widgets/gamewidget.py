@@ -3,7 +3,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014 - 2017 Andreas Schulz
+# Copyright (c) 2014 - 2020 Andreas Schulz
 #
 # All rights reserved.
 #
@@ -42,7 +42,7 @@ class GameWidget(QWidget):
 
     def __init__(self, rows: int, columns: int, mines: int, parent=None):
         super(GameWidget, self).__init__(parent)
-        uic.loadUi(path.join(path.dirname(__file__), '..', 'ui', 'gamewidget.ui'), self)
+        uic.loadUi(path.join(path.dirname(__file__), '..', 'ui', 'UI_GameWidget.ui'), self)
 
         self.matrix: List[List[Tile]] = []
 
@@ -108,4 +108,3 @@ class GameWidget(QWidget):
                 if not (countIsVisible or btn.isMine):
                     return
         self.gameIsWon.emit()
-

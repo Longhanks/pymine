@@ -3,7 +3,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014 - 2017 Andreas Schulz
+# Copyright (c) 2014 - 2020 Andreas Schulz
 #
 # All rights reserved.
 #
@@ -46,4 +46,3 @@ def main(argv=None) -> int:
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
-
