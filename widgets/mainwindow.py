@@ -61,11 +61,13 @@ class MainWindow(QMainWindow):
                               parent=self)
             game.gameIsWon.connect(self.gameIsWon)
             game.gameIsLost.connect(self.gameIsLost)
-            self.setCentralWidget(game)
 
             def cb():
-                self.resize(0, 0)
-                self.setFixedSize(self.size())
+                self.setCentralWidget(game)
+                def cb2():
+                    self.resize(0, 0)
+                    self.setFixedSize(self.size())
+                QTimer.singleShot(0, Qt.CoarseTimer, cb2)
 
             QTimer.singleShot(0, Qt.CoarseTimer, cb)
             self.dialogIsVisible = False

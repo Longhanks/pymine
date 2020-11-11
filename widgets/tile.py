@@ -80,7 +80,6 @@ class Tile(QFrame):
             self.label.setText('F')
 
     def mousePressEvent(self, event):
-        super().mousePressEvent(event)
         if event.button() == Qt.LeftButton:
             self.clickedTile()
         if event.button() == Qt.RightButton:
